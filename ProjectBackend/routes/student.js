@@ -37,4 +37,29 @@ router.get("/getCourseStudent/:name",(req,res)=>{
         res.send(result.createResult(error,data))
     })
 })
+
+router.get("/getvideos/:name", (req, res) => {
+    const name = req.params.name;
+    const sql = `select c.course_name, v.youtube_url,s.name from courses c 
+    inner join student s on c.course_id=s.course_id inner join videos v on v.course_id= c.course_id 
+    where s.name= ?AND c.end_date >=current_date`
+    // const sql = `
+    //     SELECT 
+    //         c.course_name,
+    //         v.video_id,
+    //         v.title,
+    //         v.youtube_url
+    //     FROM student s
+    //     INNER JOIN courses c ON s.course_id = c.course_id
+    //     INNER JOIN videos v ON c.course_id = v.course_id
+    //     WHERE s.reg_no = ?
+    //       AND DATE_ADD(v.added_at, INTERVAL c.video_expire_days DAY) >= CURDATE()
+    //       AND CURDATE() BETWEEN c.start_date AND c.end_date
+    // `;
+
+    pool.query(sql, [name], (error, data) => {
+        res.send(result.createResult(error, data));
+    });
+});
+
 module.exports = router
