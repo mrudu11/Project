@@ -47,5 +47,26 @@ router.delete("/delete/:cid",(req,res)=>{
         res.send(result.createResult(error,data))
     })
 })
+
+
+//update courses
+router.put('/update/:course_id', (req, res) => {
+    const { course_id } = req.params;
+    const { course_name, description, fees, start_date, end_date, video_expire_days } = req.body;
+
+    const sql = `
+        UPDATE courses
+        SET course_name = ?, description = ?, fees = ?, start_date = ?, end_date = ?, video_expire_days = ?
+        WHERE course_id = ?
+    `;
+
+    pool.query(
+        sql,
+        [course_name, description, fees, start_date, end_date, video_expire_days, course_id],
+        (error, data) => {
+            res.send(result.createResult(error, data));
+        }
+    );
+});
 // sign up for user
 module.exports = router 
