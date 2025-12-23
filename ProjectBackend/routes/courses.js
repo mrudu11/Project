@@ -68,5 +68,14 @@ router.put('/update/:course_id', (req, res) => {
         }
     );
 });
+
+//get all courses on the date 
+router.get("/all_courses",(req,res)=>{
+    const {startDate, endDate} = req.query
+    const sql = `select * from courses where start_date >= ? and end_date <= ?`
+    pool.query(sql,[startDate,endDate],(error,data)=>{
+        res.send(result.createResult(error,data))
+    })
+})
 // sign up for user
 module.exports = router 
